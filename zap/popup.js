@@ -15,10 +15,12 @@ window.onload = function() {
 function authHandler(error, authData) {
 	if (error) {
 		console.log("Login failed", error);
+		setError(error.message);
 	} else {
 		console.log("Authed");
 		hide("login");
 		show("logout-btn");
+		setError('');
 		chrome.extension.getBackgroundPage().startListening(authData.uid);
 	}
 }
@@ -44,6 +46,10 @@ function hide(id) {
 
 function show(id) {
 	document.getElementById(id).style.display = 'block';
+}
+
+function setError(msg) {
+	document.getElementById("error").innerHTML = msg;
 }
 
 function getText(id) {

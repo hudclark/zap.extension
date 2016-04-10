@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Zap</title>
+    <script type="text/javascript" src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+    <script src="popup.js"></script>
+    <style>
+body {
+  max-width:400px;
+  background-color:#4DB6AC;
+  color:white;
+}
+.btn {
+  margin-top: 6px;
+  background-color: #00695C;
+  border: none;
+    text-decoration:none;
+      padding: 5px 10px;
+        color:white;
+}
+    </style>
+  </head>
+  <body>
+    <div id="login">
+      <p>Login to Zap</p>
+      <input type="text" placeholder="Email" id="email">
+      <input type="password" placeholder="Password" id="password">
+      <button class="btn" id="login-btn">Login</button>
+    </div>
+    <p id="error"></p>
+    <button class="btn" id="logout-btn">Logout</button>
+  </body>
+</html>
