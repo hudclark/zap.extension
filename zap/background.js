@@ -38,7 +38,7 @@ function newData(snapshot, prevChildKey) {
 		type: "basic", 
 		title: val.title,
 		message: val.text,
-		iconUrl: "icon.png"
+		iconUrl: "img/icon128.png"
 	}
 	chrome.notifications.create(opt, function(id) {
 		timer = setTimeout(function(){
