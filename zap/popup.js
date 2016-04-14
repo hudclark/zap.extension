@@ -5,40 +5,40 @@ window.onload = function() {
 	document.getElementById("login-btn").addEventListener("click", login);
 	var auth = ref.getAuth();
 	if (auth) {
-		console.log("user is logged in");
-		hide("login");
+		setText('user', "Logged in as " + auth.password.email);
+		toggleLoginView(true);
 	} else {
-		hide("logout-btn");
+		toggleLoginView(false);
 	}
 };
 
 function authHandler(error, authData) {
 	if (error) {
-		console.log("Login failed", error);
-		setError(error.message);
+		setText('error', error.message);
 	} else {
-		console.log("Authed");
-		hide("login");
-		show("logout-btn");
-		setError('');
+		toggleLoginView(true);
+		setText('user', "Logged in as " + authData.password.email);
 		chrome.extension.getBackgroundPage().startListening(authData.uid);
 	}
+	toggleLoader(false);
 }
 
 function login() {
-	console.log("Logging in...");
 	ref.authWithPassword({
-		email: getText("email"),
-		password: getText("password")
+		email: getText('email'),
+		password: getText('password')
 	}, authHandler);
+	setText('error', '');
+	toggleLoader(true);
 }
 
 function logout() {
-	ref.unauth();
 	chrome.extension.getBackgroundPage().stopListening();
-	hide("logout-btn");
-	show("login");
+	ref.unauth();
+	toggleLoginView(false);
 }
+
+// --------- ui helper methods ------------------------
 
 function hide(id) {
 	document.getElementById(id).style.display = 'none';
@@ -48,10 +48,30 @@ function show(id) {
 	document.getElementById(id).style.display = 'block';
 }
 
-function setError(msg) {
-	document.getElementById("error").innerHTML = msg;
+function setText(id, msg) {
+	document.getElementById(id).innerHTML = msg;
 }
 
 function getText(id) {
 	return document.getElementById(id).value;
+}
+
+function toggleLoader(loading) {
+	if (loading) {
+		show('loader');
+		hide('login-btn'); 
+	} else {
+		hide('loader');
+		show('login-btn'); 
+	}
+}
+
+function toggleLoginView(loggedIn) {
+	if (loggedIn) {
+		hide('logged-in');
+		show('logged-out');
+	} else {
+		show('logged-in');
+		hide('logged-out');
+	}
 }

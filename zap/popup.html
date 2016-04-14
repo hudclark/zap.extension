@@ -6,9 +6,8 @@
     <script src="popup.js"></script>
     <style>
 body {
-  max-width:400px;
-  background-color:#009688;
-  color:white;
+  width:200px;
+  color: #00695C;
 }
 .btn {
   background-color: #00695C;
@@ -17,19 +16,46 @@ body {
   padding: 5px 10px;
   color:white;
 }
-#login-btn {
-  margin-top: 6px;
+#loader {
+  display:none;
+  border: 5px solid #eeeeee;
+  border-top: 5px solid #0097A7;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 2s linear infinite;
 }
+      @keyframes spin {
+        0% { transform: rotate(0deg);  }
+        100% { transform: rotate(360deg);  }
+      }
+      #login-btn {
+        margin-top: 6px;
+      }
+      #logo {
+        padding:8px;
+      }
+      input {
+        padding-top:2px;
+        padding-bottom:2px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+      }
     </style>
   </head>
   <body>
-    <div id="login">
-      <p>Login to Zap</p>
+    <div id="logged-in">
+      <img id="logo" src="img/logo.png">
       <input type="text" placeholder="Email" id="email">
       <input type="password" placeholder="Password" id="password">
       <button class="btn" id="login-btn">Login</button>
+      <p id="error"></p>
+      <div id="loader"></div>
     </div>
-    <p id="error"></p>
-    <button class="btn" id="logout-btn">Logout</button>
+
+    <div id="logged-out">
+      <p id="user"></p>
+      <button class="btn" id="logout-btn">Logout</button>
+    </div>
   </body>
 </html>
