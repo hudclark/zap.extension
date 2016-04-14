@@ -7,17 +7,39 @@
     <style>
 body {
   width:200px;
+  height:200px;
   color: #00695C;
 }
 .btn {
-  background-color: #00695C;
+  background-color: #009688;
   border: none;
   text-decoration:none;
   padding: 5px 10px;
   color:white;
+  border-radius: 4px;
+}
+#toggle-notifications {
+  margin-top: 15px;
+}
+#logout-btn {
+  margin-top:10px;
+} 
+#email {
+  margin-top:15px;
+}
+#download {
+  margin-top:15px;
+  color: #00695C;
+}
+.centered {
+  text-align:center;
+}
+#login-btn {
+  margin:0 auto;
 }
 #loader {
   display:none;
+  margin:0 auto;
   border: 5px solid #eeeeee;
   border-top: 5px solid #0097A7;
   border-radius: 50%;
@@ -33,7 +55,8 @@ body {
         margin-top: 6px;
       }
       #logo {
-        padding:8px;
+        display:block;
+          margin:auto;
       }
       input {
         padding-top:2px;
@@ -44,8 +67,10 @@ body {
     </style>
   </head>
   <body>
-    <div id="logged-in">
-      <img id="logo" src="img/logo.png">
+    <img id="logo" src="img/logo.png">
+    <hr>
+    <div class="centered" id="logged-in">
+      <a id="download" href="#">Download the Android app!</a>
       <input type="text" placeholder="Email" id="email">
       <input type="password" placeholder="Password" id="password">
       <button class="btn" id="login-btn">Login</button>
@@ -53,8 +78,9 @@ body {
       <div id="loader"></div>
     </div>
 
-    <div id="logged-out">
-      <p id="user"></p>
+    <div class="centered" id="logged-out">
+      <p style="margin-top:5px;"id="user"></p>
+      <button class="btn" id="toggle-notifications">Disable Notifications</button>
       <button class="btn" id="logout-btn">Logout</button>
     </div>
   </body>

@@ -3,6 +3,9 @@ var ref = new Firebase("https://zap-extension.firebaseio.com");
 window.onload = function() {
 	document.getElementById("logout-btn").addEventListener("click", logout);
 	document.getElementById("login-btn").addEventListener("click", login);
+	document.getElementById("password").addEventListener("keypress", function(e) {
+		if (e.keyCode == 13) { login(); }
+	});
 	var auth = ref.getAuth();
 	if (auth) {
 		setText('user', "Logged in as " + auth.password.email);

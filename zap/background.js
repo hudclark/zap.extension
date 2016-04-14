@@ -22,11 +22,11 @@ function startListening(uid) {
 		if (snapshot.val() === true) {
 			presence.onDisconnect().remove();
 			presence.set(true);
-			icons = new Firebase(FIREBASE_ROOT + "/icons");
-			notes = new Firebase(FIREBASE_ROOT + "/notifications/" + uid);
-			notes.on("child_added", newData, dataError);
 		}
 	});
+	icons = new Firebase(FIREBASE_ROOT + "/icons");
+	notes = new Firebase(FIREBASE_ROOT + "/notifications/" + uid);
+	notes.on("child_added", newData, dataError);
 }
 
 function stopListening() {
