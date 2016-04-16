@@ -1,44 +1,42 @@
-var ref = new Firebase("https://zap-extension.firebaseio.com");
-
 window.onload = function() {
-	document.getElementById("logout-btn").addEventListener("click", logout);
-	document.getElementById("login-btn").addEventListener("click", login);
-	document.getElementById("password").addEventListener("keypress", function(e) {
-		if (e.keyCode == 13) { login(); }
+	// should probably show a spinner while this is happening.
+	sendMsg({action:"setView"});
+	document.getElementById("logout-btn").addEventListener("click", function() {
+		sendMsg({action:"logout"});
 	});
-	var auth = ref.getAuth();
-	if (auth) {
-		setText('user', "Logged in as " + auth.password.email);
-		toggleLoginView(true);
-	} else {
-		toggleLoginView(false);
-	}
+	document.getElementById("login-btn").addEventListener("click", startLogin);
+	document.getElementById("password").addEventListener("keypress", function(e) {
+		if (e.keyCode == 13) { startLogin(); }
+	});
 };
 
-function authHandler(error, authData) {
-	if (error) {
-		setText('error', error.message);
-	} else {
-		toggleLoginView(true);
-		setText('user', "Logged in as " + authData.password.email);
-		chrome.extension.getBackgroundPage().startListening(authData.uid);
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+	if (request.action == "setText") {
+		setText(request.id, request.text);
 	}
-	toggleLoader(false);
+	if (request.action == "error") {
+		setText('error', request.msg);
+	}
+	else if (request.action == "hide") {
+		hide(request.id);
+	}
+	else if (request.action == "show") {
+		show(request.id);
+	}
+	else if (request.action == "toggleLoader") {
+		toggleLoader(request.loading);
+	}
+	else if (request.action == "toggleLogin") {
+		toggleLogin(request.loggedIn);
+	}
+});
+
+function startLogin() {
+	sendMsg({action:"login", user:getText('email'), pass:getText('password')});
 }
 
-function login() {
-	ref.authWithPassword({
-		email: getText('email'),
-		password: getText('password')
-	}, authHandler);
-	setText('error', '');
-	toggleLoader(true);
-}
-
-function logout() {
-	chrome.extension.getBackgroundPage().stopListening();
-	ref.unauth();
-	toggleLoginView(false);
+function sendMsg(params) {
+	chrome.runtime.sendMessage(params);
 }
 
 // --------- ui helper methods ------------------------
@@ -69,7 +67,7 @@ function toggleLoader(loading) {
 	}
 }
 
-function toggleLoginView(loggedIn) {
+function toggleLogin(loggedIn) {
 	if (loggedIn) {
 		hide('logged-in');
 		show('logged-out');

@@ -1,21 +1,73 @@
 const FIREBASE_ROOT = "https://zap-extension.firebaseio.com";
-const DEFAULT_IMG = "img/icon128.png"
+const DEFAULT_IMG = "img/icon128.png";
 const IMG_ENCODE = "data:image/png;base64,";
-var notes = null
-var presence = null
-var icons = null
+var root = new Firebase(FIREBASE_ROOT);
+var notes = null;
+var presence = null;
+var icons = null;
 
 window.onload = function() {
+	Firebase.goOnline();
 	// if already authed, start listening 
-	var ref = new Firebase(FIREBASE_ROOT);
-	var auth = ref.getAuth();
+	var auth = root.getAuth();
 	if (auth) {
 		startListening(auth.uid);
 	}
 }
 
-function startListening(uid) {
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+	if (request.action == "login") {
+		login(request.user, request.pass);
+	}
+	else if (request.action == "logout") {
+		logout();
+	} 
+	else if (request.action == "setView") {
+		setView();
+	}
+});
+
+function login(user, pass) {
 	Firebase.goOnline();
+	root.authWithPassword({
+		email: user,
+		password: pass 
+	}, authHandler);
+	sendMsg({action:"error", msg:""});
+	sendMsg({action:"toggleLoader", loading:true});
+}
+
+function logout() {
+	stopListening();
+	if (root != null)
+		root.unauth();
+	sendMsg({action:"toggleLogin", loggedIn:false});
+}
+
+function authHandler(error, authData) {
+	if (error) {
+		sendMsg({action:"error", msg:error.message});
+	} else {
+		sendMsg({action:"toggleLogin", loggedIn:true});
+		sendMsg({action:"setText", id:"user",
+			text:"Logged in as " + authData.password.email});
+		startListening(authData.uid);
+	}
+	sendMsg({action:"toggleLoader", loading:false});
+}
+
+function setView() {
+	var auth = root.getAuth();
+	if (auth) {
+		sendMsg({action:"setText", id:"user", 
+			text:"Logged in as " + auth.password.email});
+		sendMsg({action:"toggleLogin", loggedIn:true});
+	} else {
+		sendMsg({action:"toggleLogin", loggedIn:false});
+	}
+}
+
+function startListening(uid) {
 	var presence = new Firebase(FIREBASE_ROOT + "/presence/" + uid);
 	var connected = new Firebase(FIREBASE_ROOT + '/.info/connected');
 	connected.on('value', function(snapshot) {
@@ -32,7 +84,6 @@ function startListening(uid) {
 function stopListening() {
 	if (notes != null) notes.off("child_added");
 	if (presence != null) presence.remove();
-	icons = null;
 	Firebase.goOffline();
 }
 
@@ -71,6 +122,14 @@ function getImage(string) {
 
 function dataError(errorObject) {
 	console.log(errorObject.message);
-	new Firebase(FIREBASE_ROOT).unauth();
-	stopListening(); // disconnects from firebase.
+	logout();
+	sendMsg({action:"error", msg:"Error authenticating"});
+	chrome.runtime.sendMessage({
+		action: "logout",
+		msg: "Error Authenticating"
+	});
+}
+
+function sendMsg(params) {
+	chrome.runtime.sendMessage(params);
 }
