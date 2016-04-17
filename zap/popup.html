@@ -4,27 +4,49 @@
     <title>Zap</title>
     <script type="text/javascript" src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
     <script src="popup.js"></script>
+    <link rel="stylesheet" href="material.min.css">
+    <script src="./material.min.js"></script>
     <link rel="stylesheet" type="text/css" href="popup.css">
   </head>
   <body>
-    <img id="logo" src="img/logo.png">
-    <hr>
-    <div class="centered" id="logged-in">
-      <input type="text" placeholder="Email" id="email">
-      <input type="password" placeholder="Password" id="password">
-      <button class="btn" id="login-btn">Login</button>
-      <p id="error"></p>
-      <div id="loader"></div>
-    </div>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <!-- Title -->
+          <span class="mdl-layout-title">Zap</span>
+          <!-- Add spacer, to align navigation to the right -->
+          <div class="mdl-layout-spacer"></div>
+        </div>
+      </header>
+      <main class="mdl-layout__content">
+      <div class="page-content">
 
-    <div class="centered" id="logged-out">
-      <p style="margin-top:5px;"id="user"></p>
-      <button class="btn" id="toggle-notifications">Disable Notifications</button>
-      <button class="btn" id="logout-btn">Logout</button>
-    </div>
+        <div id="logged-in">
+          <div class="input-container mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="email" id="email">
+            <label class="mdl-textfield__label" for="email">Email</label>
+          </div>
+          <div class="input-container mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="password" id="password">
+            <label class="mdl-textfield__label" for="password">Password</label>
+          </div>
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="login-btn">Login</button>
+          <p id="error"></p>
+          <div id="loader" class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+        </div>
 
-    <div id="bottom">
-      <a class="centered" id="download" href="#">Download the Android app</a>
+        <div id="logged-out">
+          <p class="mdl-typography--body-1-color-contrast" id="user"></p>
+          <div class="mdl-cell-bottom">
+          <label id="test" for="toggle-notifications" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+            <input type="checkbox" id="toggle-notifications" class="mdl-switch__input" checked>
+            <span class="mdl-switch__label">Notifications on</span>
+          </label>
+
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="logout-btn">Logout</button>
+        </div>
+      </div>
+      </main>
     </div>
   </body>
 </html>

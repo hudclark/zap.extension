@@ -5,9 +5,9 @@ var root = new Firebase(FIREBASE_ROOT);
 var notes = null;
 var presence = null;
 var icons = null;
+var listening = false;
 
 window.onload = function() {
-	Firebase.goOnline();
 	// if already authed, start listening 
 	var auth = root.getAuth();
 	if (auth) {
@@ -25,10 +25,20 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	else if (request.action == "setView") {
 		setView();
 	}
+	else if (request.action == "toggleNotifications") {
+		if (request.notify) {
+			startListening(root.getAuth().uid);
+		} else {
+			stopListening();
+		}
+	}
+});
+
+chrome.notifications.onClicked.addListener(function(id) {
+	chrome.notifications.clear(id);
 });
 
 function login(user, pass) {
-	Firebase.goOnline();
 	root.authWithPassword({
 		email: user,
 		password: pass 
@@ -62,13 +72,16 @@ function setView() {
 		sendMsg({action:"setText", id:"user", 
 			text:"Logged in as " + auth.password.email});
 		sendMsg({action:"toggleLogin", loggedIn:true});
+		if (!listening) {
+			sendMsg({action:"toggleSwitch", on:false});
+		}
 	} else {
 		sendMsg({action:"toggleLogin", loggedIn:false});
 	}
 }
 
 function startListening(uid) {
-	var presence = new Firebase(FIREBASE_ROOT + "/presence/" + uid);
+	presence = new Firebase(FIREBASE_ROOT + "/presence/" + uid);
 	var connected = new Firebase(FIREBASE_ROOT + '/.info/connected');
 	connected.on('value', function(snapshot) {
 		if (snapshot.val() === true) {
@@ -79,12 +92,13 @@ function startListening(uid) {
 	icons = new Firebase(FIREBASE_ROOT + "/icons");
 	notes = new Firebase(FIREBASE_ROOT + "/notifications/" + uid);
 	notes.on("child_added", newData, dataError);
+	listening = true;
 }
 
 function stopListening() {
 	if (notes != null) notes.off("child_added");
 	if (presence != null) presence.remove();
-	Firebase.goOffline();
+	listening = false;
 }
 
 function newData(snapshot, prevChildKey) {
@@ -104,6 +118,7 @@ function newData(snapshot, prevChildKey) {
 		notify(title, text);
 	}
 }
+
 
 function notify(title, text, img = DEFAULT_IMG) {
 	var opt = {

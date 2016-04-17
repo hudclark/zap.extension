@@ -8,6 +8,7 @@ window.onload = function() {
 	document.getElementById("password").addEventListener("keypress", function(e) {
 		if (e.keyCode == 13) { startLogin(); }
 	});
+	document.getElementById("toggle-notifications").addEventListener("click", toggleNotifications);
 };
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -29,7 +30,19 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	else if (request.action == "toggleLogin") {
 		toggleLogin(request.loggedIn);
 	}
+	else if (request.action == "toggleSwitch") {
+		toggleSwitch(request.on);
+	}
 });
+
+function toggleNotifications() {
+	var toggle = document.getElementById("toggle-notifications");
+	if (toggle.checked) {
+		sendMsg({action:"toggleNotifications", notify:true});
+	} else {
+		sendMsg({action:"toggleNotifications", notify:false});
+	}
+}
 
 function startLogin() {
 	sendMsg({action:"login", user:getText('email'), pass:getText('password')});
@@ -74,5 +87,15 @@ function toggleLogin(loggedIn) {
 	} else {
 		show('logged-in');
 		hide('logged-out');
+		toggleSwitch(true);
+	}
+}
+
+function toggleSwitch(on) {
+	if (on) {
+		document.querySelector('#toggle-notifications').parentElement.MaterialSwitch.on();
+	}
+	else {
+		document.querySelector('#toggle-notifications').parentElement.MaterialSwitch.off();
 	}
 }
