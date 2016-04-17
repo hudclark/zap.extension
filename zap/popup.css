@@ -1,10 +1,6 @@
-body {
+html, body {
 	width:300px;
-	height:300px;
-}
-#logo {
-		display:block;
-		margin:0 auto;
+	height:375px;
 }
 .input-container {
 		width:80%;
@@ -18,7 +14,7 @@ body {
 }
 
 .page-content {
-		padding-left: 16px;
+		padding: 16px;
 }
 #loader {
 		display:none;
@@ -26,9 +22,14 @@ body {
 #error {
 		padding-top:8px;
 }
-#email{
-		margin-top:8px;
-}
 #logout-btn {
-		margin-top:16px;
+		bottom:52px;
+		position:absolute;
+}
+#user {
+		bottom:0px;
+		position:absolute;
+}
+.mdl-mini-footer {
+		padding:16px 16px;
 }

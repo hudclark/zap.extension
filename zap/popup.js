@@ -82,13 +82,20 @@ function toggleLoader(loading) {
 
 function toggleLogin(loggedIn) {
 	if (loggedIn) {
+		setHeight('256px');
 		hide('logged-in');
 		show('logged-out');
 	} else {
+		setHeight('375px');
 		show('logged-in');
 		hide('logged-out');
 		toggleSwitch(true);
 	}
+}
+
+function setHeight(height) {
+		document.documentElement.style.height = height;
+		document.body.style.height = height;
 }
 
 function toggleSwitch(on) {
