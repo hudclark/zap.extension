@@ -1,0 +1,28 @@
+.ribben {
+		width:100%;
+		height:40vh;
+		background-color: #3F51B5;
+		flex-shrink: 0;
+}
+
+.main {
+		margin-top: -35vh;
+		flex-shrink:0;
+}
+
+.main-content {
+		border-radius: 2px;
+		padding: 40px 56px;
+		margin-bottom: 80px;
+}
+
+.container {
+		max-width:1600px;
+		width: calc(100% - 16px);
+		margin:0 auto;
+}
+
+a {
+		color: #00BCD4;
+		text-decoration:none;
+}

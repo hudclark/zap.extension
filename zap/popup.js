@@ -82,11 +82,11 @@ function toggleLoader(loading) {
 
 function toggleLogin(loggedIn) {
 	if (loggedIn) {
-		setHeight('256px');
+		setHeight('242px');
 		hide('logged-in');
 		show('logged-out');
 	} else {
-		setHeight('375px');
+		setHeight('356px');
 		show('logged-in');
 		hide('logged-out');
 		toggleSwitch(true);
