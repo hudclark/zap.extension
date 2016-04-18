@@ -10,6 +10,11 @@ window.onload = function() {
 	});
 	document.getElementById("toggle-notifications").addEventListener("click", toggleNotifications);
 };
+window.addEventListener('click', function(e) {
+	if (e.target.href !== undefined) {
+		chrome.tabs.create({url:e.target.href});
+	}
+});
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	if (request.action == "setText") {
@@ -82,11 +87,11 @@ function toggleLoader(loading) {
 
 function toggleLogin(loggedIn) {
 	if (loggedIn) {
-		setHeight('256px');
+		setHeight('242px');
 		hide('logged-in');
 		show('logged-out');
 	} else {
-		setHeight('375px');
+		setHeight('356px');
 		show('logged-in');
 		hide('logged-out');
 		toggleSwitch(true);
@@ -94,8 +99,8 @@ function toggleLogin(loggedIn) {
 }
 
 function setHeight(height) {
-		document.documentElement.style.height = height;
-		document.body.style.height = height;
+	document.documentElement.style.height = height;
+	document.body.style.height = height;
 }
 
 function toggleSwitch(on) {
