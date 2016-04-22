@@ -7,8 +7,8 @@ presence = null
 icons = null
 listening = false
 
-window.onLoad = ->
-	auth = getAuth()
+window.onload = ->
+	auth = root.getAuth()
 	if auth then startListening auth.uid
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) ->

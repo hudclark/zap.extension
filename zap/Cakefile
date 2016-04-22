@@ -6,3 +6,10 @@ task 'watch', 'Watch src/ for changes', ->
 		process.stderr.write data.toString()
 	coffee.stdout.on 'data', (data) ->
 		print data.toString()
+
+task 'build', 'Build src/ ', ->
+	coffee = spawn 'coffee', ['-c', '-o', 'lib/gen', 'src']
+	coffee.stderr.on 'data', (data) ->
+		process.stderr.write data.toString()
+	coffee.stdout.on 'data', (data) ->
+		print data.toString()
