@@ -8,7 +8,8 @@ window.onload = ->
 		if e.keyCode is 13 then startLogin())
 
 window.addEventListener("click", (e) ->
-	if e.target.href? then chrome.tabs.create {url:e.target.href})
+	if e.target.href? then window.open e.target.href
+)
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) ->
 	switch request.action
